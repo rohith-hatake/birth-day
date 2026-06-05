@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+min-height:100vh;
+text-align:center;
+color:white;
+overflow-x:hidden;
+background:linear-gradient(-45deg,#ff006e,#8338ec,#3a86ff,#06d6a0);
+background-size:400% 400%;
+animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.hidden{
+display:none!important;
+}
+
+#password-section,
+#photoReveal,
+#question-section{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+#display{
+font-size:32px;
+letter-spacing:8px;
+margin:25px;
+min-height:40px;
+}
+
+.numpad{
+display:grid;
+grid-template-columns:repeat(3,120px);
+gap:40px;
+}
+
+.numpad button{
+width:80px;
+height:80px;
+background:#ff4d6d;
+border:none;
+position:relative;
+transform:rotate(-45deg);
+cursor:pointer;
+margin:auto;
+}
+
+.numpad button::before,
+.numpad button::after{
+content:"";
+position:absolute;
+width:80px;
+height:80px;
+border-radius:50%;
+background:inherit;
+}
+
+.numpad button::before{
+top:-40px;
+left:0;
+}
+
+.numpad button::after{
+left:40px;
+top:0;
+}
+
+.numpad span{
+display:inline-block;
+transform:rotate(45deg);
+color:white;
+font-size:22px;
+font-weight:bold;
+position:relative;
+z-index:2;
+}
+/* PHOTO REVEAL PAGE */
+
+#photoReveal{
+background:linear-gradient(135deg,#141e30,#243b55);
+}
+
+.zoom-photo{
+width:300px;
+height:300px;
+object-fit:cover;
+border-radius:25px;
+border:8px solid white;
+box-shadow:0 0 40px rgba(255,255,255,.4);
+animation:zoomIn 2s ease forwards;
+}
+
+@keyframes zoomIn{
+0%{
+transform:scale(.2);
+opacity:0;
+}
+100%{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.photo-msg{
+margin-top:25px;
+font-size:24px;
+font-weight:bold;
+}
+
+/* BUTTONS */
+
+.btn{
+padding:14px 30px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+margin-top:20px;
+font-size:18px;
+font-weight:bold;
+background:linear-gradient(135deg,#ff416c,#ff4b2b);
+color:white;
+box-shadow:0 5px 15px rgba(0,0,0,.25);
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+}
+
+/* QUESTION PAGE */
+
+.question-box{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(15px);
+padding:50px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+/* GIFT SECTION */
+
+#gift-section{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:30px;
+}
+
+.gift-container{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+flex-wrap:wrap;
+margin-top:40px;
+}
+
+.gift{
+width:170px;
+height:170px;
+background:linear-gradient(135deg,#ff4b2b,#ff416c);
+border-radius:15px;
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+font-weight:bold;
+font-size:20px;
+box-shadow:0 15px 30px rgba(0,0,0,.25);
+transition:.3s;
+}
+
+.gift:hover{
+transform:translateY(-12px) scale(1.05);
+}
+
+.gift::before{
+content:"";
+position:absolute;
+left:50%;
+top:0;
+width:20px;
+height:100%;
+background:white;
+transform:translateX(-50%);
+}
+
+.gift::after{
+content:"";
+position:absolute;
+top:50%;
+left:0;
+width:100%;
+height:20px;
+background:white;
+transform:translateY(-50%);
+}
+
+.locked{
+opacity:.4;
+cursor:not-allowed;
+}
+/* GIFT CARD */
+
+.card{
+background:white;
+color:#333;
+padding:30px;
+border-radius:20px;
+max-width:700px;
+margin:30px auto;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.photo{
+width:250px;
+border-radius:15px;
+}
+
+/* POLAROID GALLERY */
+
+.gallery{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+margin-top:20px;
+}
+
+.polaroid{
+background:white;
+padding:10px 10px 25px 10px;
+width:180px;
+border-radius:8px;
+box-shadow:0 8px 20px rgba(0,0,0,.25);
+animation:slideUp 1s ease forwards;
+opacity:0;
+}
+
+.polaroid:nth-child(1){animation-delay:.2s;}
+.polaroid:nth-child(2){animation-delay:.4s;}
+.polaroid:nth-child(3){animation-delay:.6s;}
+.polaroid:nth-child(4){animation-delay:.8s;}
+.polaroid:nth-child(5){animation-delay:1s;}
+
+.polaroid img{
+width:100%;
+height:200px;
+object-fit:cover;
+border-radius:5px;
+}
+
+.polaroid p{
+margin-top:10px;
+font-size:14px;
+font-weight:bold;
+color:#333;
+}
+
+.polaroid:nth-child(odd){
+transform:rotate(-5deg);
+}
+
+.polaroid:nth-child(even){
+transform:rotate(5deg);
+}
+
+.polaroid:hover{
+transform:rotate(0deg) scale(1.08);
+transition:.4s;
+}
+
+@keyframes slideUp{
+0%{
+opacity:0;
+transform:translateY(80px);
+}
+100%{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* PREMIUM CAKE */
+
+.cake-container{
+position:relative;
+display:inline-block;
+margin-top:30px;
+}
+
+.candles{
+position:absolute;
+top:-35px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:25px;
+}
+
+.flame{
+font-size:40px;
+animation:flicker .2s infinite alternate;
+filter:drop-shadow(0 0 10px orange);
+}
+
+@keyframes flicker{
+0%{transform:translateY(0) scale(1);}
+25%{transform:translateY(-2px) scale(1.1);}
+50%{transform:translateY(1px) scale(.95);}
+75%{transform:translateY(-1px) scale(1.05);}
+100%{transform:translateY(0) scale(1);}
+}
+
+.cake{
+font-size:180px;
+cursor:pointer;
+}
+
+.birthday-popup{
+font-size:38px;
+font-weight:bold;
+animation:bounceIn 1s ease;
+text-shadow:
+0 0 20px #fff,
+0 0 40px #ff69b4,
+0 0 60px #ff1493;
+}
+
+@keyframes bounceIn{
+0%{
+transform:scale(0);
+opacity:0;
+}
+60%{
+transform:scale(1.2);
+}
+100%{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.final-message{
+font-size:24px;
+margin-top:25px;
+line-height:1.8;
+}
+
+/* HEARTS & CONFETTI */
+
+.sparkle{
+position:fixed;
+top:-20px;
+font-size:25px;
+pointer-events:none;
+animation:sparkleFall 3s linear forwards;
+}
+
+@keyframes sparkleFall{
+0%{
+transform:translateY(-50px) scale(0);
+opacity:1;
+}
+100%{
+transform:translateY(100vh) scale(1.5);
+opacity:0;
+}
+}
+
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+top:-10px;
+animation:fall 4s linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(720deg);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD PAGE -->
+
+<div id="password-section">
+
+<h1>🔐 Enter Password</h1>
+
+<div id="display"></div>
+
+<div class="numpad">
+
+<button onclick="pressNum(1)"><span>1</span></button>
+<button onclick="pressNum(2)"><span>2</span></button>
+<button onclick="pressNum(3)"><span>3</span></button>
+
+<button onclick="pressNum(4)"><span>4</span></button>
+<button onclick="pressNum(5)"><span>5</span></button>
+<button onclick="pressNum(6)"><span>6</span></button>
+
+<button onclick="pressNum(7)"><span>7</span></button>
+<button onclick="pressNum(8)"><span>8</span></button>
+<button onclick="pressNum(9)"><span>9</span></button>
+
+<button onclick="clearDisplay()"><span>C</span></button>
+<button onclick="pressNum(0)"><span>0</span></button>
+<button onclick="checkPassword()"><span>✔</span></button>
+
+</div>
+
+</div>
+
+<!-- PHOTO PAGE -->
+
+<div id="photoReveal" class="hidden">
+
+<img src="C:/Users/USER/OneDrive/Pictures/HE-RO/WhatsApp Image 2026-06-05 at 19.19.55.jpeg" class="zoom-photo">
+
+<div class="photo-msg">
+HAPPIEEE BIRTHDAY BUTTI ❤️
+</div>
+
+<button class="btn" onclick="goToQuestion()">
+Continue 🎁
+</button>
+
+</div>
+
+<!-- QUESTION PAGE -->
+
+<div id="question-section" class="hidden">
+
+<div class="question-box">
+
+<h2>Wanna to see surprise? 🎁</h2>
+
+<button class="btn" onclick="showGifts()">
+Yes ❤️
+</button>
+
+<button class="btn" onclick="alert('No is not an option 😜')">
+No 😏
+</button>
+
+</div>
+
+</div>
+<!-- GIFT PAGE -->
+
+<div id="gift-section" class="hidden">
+
+<h1>🎉 Happy Birthday HEMA 🎉</h1>
+
+<div id="giftView">
+
+<div class="gift-container">
+
+<div class="gift" onclick="openGift(1)">
+Gift 1
+</div>
+
+<div id="gift2" class="gift locked">
+🔒 Gift 2
+</div>
+
+<div id="gift3" class="gift locked">
+🔒 Gift 3
+</div>
+
+</div>
+
+</div>
+
+<div id="giftContent"></div>
+
+</div>
+
+<script>
+
+let entered="";
+let unlocked=1;
+
+/* PASSWORD */
+
+function pressNum(num){
+
+entered+=num;
+
+document.getElementById("display").innerText=
+entered.replace(/./g,"*");
+
+}
+
+function clearDisplay(){
+
+entered="";
+
+document.getElementById("display").innerText="";
+
+}
+
+function checkPassword(){
+
+if(entered==="0606"){
+
+document.getElementById("password-section")
+.classList.add("hidden");
+
+document.getElementById("photoReveal")
+.classList.remove("hidden");
+
+}
+else{
+
+alert("Wrong Password ❌");
+
+clearDisplay();
+
+}
+
+}
+
+/* PHOTO PAGE */
+
+function goToQuestion(){
+
+document.getElementById("photoReveal")
+.classList.add("hidden");
+
+document.getElementById("question-section")
+.classList.remove("hidden");
+
+}
+
+/* QUESTION PAGE */
+
+function showGifts(){
+
+document.getElementById("question-section")
+.classList.add("hidden");
+
+document.getElementById("gift-section")
+.classList.remove("hidden");
+
+}
+
+/* BACK BUTTON */
+
+function backToGifts(){
+
+document.getElementById("giftContent").innerHTML="";
+
+document.getElementById("giftView").style.display="block";
+
+}
+/* OPEN GIFTS */
+
+function openGift(num){
+
+if(num>unlocked) return;
+
+document.getElementById("giftView").style.display="none";
+
+/* GIFT 1 */
+
+if(num===1){
+
+document.getElementById("giftContent").innerHTML=`
+
+<div class="card">
+
+<h2> ❤️</h2>
+
+<p>
+
+Happy Birthday Hema ❤️
+
+Happieee b'day di nee enaku epavum ehh romba special na evalo irritate panni iruken disturb panni irupen summa msg panni analum nee enaku epovum oru support ahh irundhu Iruka na down ahh iruka solla nee ena nariya encourage panni iruka thank you elathukum.ur always special for mee and again birthday happy ahh iru...
+
+Thank you for all the memories,
+laughter and happiness.
+
+✨✨✨
+
+</p>
+
+<br>
+
+<button class="btn"
+onclick="backToGifts()">
+
+Back
+
+</button>
+
+</div>
+
+`;
+
+unlocked=2;
+
+let gift2=document.getElementById("gift2");
+
+gift2.classList.remove("locked");
+
+gift2.innerHTML="Gift 2";
+
+gift2.onclick=()=>openGift(2);
+
+}
+
+/* GIFT 2 */
+
+else if(num===2){
+
+document.getElementById("giftContent").innerHTML=`
+
+<div class="card">
+
+<h2>📸 Our Memories</h2>
+
+<div class="gallery">
+
+<div class="polaroid">
+<img src="C:/Users/USER/OneDrive/Pictures/HE-RO/628281676_797623740019175_3736826171900923613_n.jpg">
+<p>❤️</p>
+</div>
+
+<div class="polaroid">
+<img src="C:/Users/USER/OneDrive/Pictures/HE-RO/627218469_2114042829360045_627342075649583536_n.jpg">
+<p>✨</p>
+</div>
+
+<div class="polaroid">
+<img src="C:/Users/USER/OneDrive/Pictures/HE-RO/627965417_1410074066802160_3853199340095858435_n.jpg">
+<p>🌸</p>
+</div>
+
+<div class="polaroid">
+<img src="C:/Users/USER/OneDrive/Pictures/HE-RO/WhatsApp Image 2026-06-05 at 19.57.54.jpeg">
+<p>💖</p>
+</div>
+
+<div class="polaroid">
+<img src="C:/Users/USER/OneDrive/Pictures/HE-RO/WhatsApp Image 2026-06-05 at 19.55.38.jpeg">
+<p>🎉</p>
+</div>
+
+</div>
+
+<br>
+
+<button class="btn"
+onclick="backToGifts()">
+
+Back
+
+</button>
+
+</div>
+
+`;
+
+unlocked=3;
+
+let gift3=document.getElementById("gift3");
+
+gift3.classList.remove("locked");
+
+gift3.innerHTML="Gift 3";
+
+gift3.onclick=()=>openGift(3);
+
+}
+
+/* GIFT 3 */
+
+else if(num===3){
+
+document.getElementById("giftContent").innerHTML=`
+
+<div class="card">
+
+<h2>💌</h2>
+
+<p>
+
+No matter where life takes us,
+
+I will always cherish
+the memories we created together.
+
+Thank you for being . ❤️
+
+</p>
+
+<br>
+
+<button class="btn"
+onclick="showCake()">
+
+Final Surprise 🎂
+
+
+</button>
+
+</div>
+
+`;
+
+}
+
+}
+/* SHOW CAKE */
+
+function showCake(){
+
+document.getElementById("giftContent").innerHTML=`
+
+<div id="cakeSection">
+
+<h1>✨ Make A Wish ✨
+    <h4>tap to cut the cake</h4></h1>
+
+<div class="cake-container">
+
+<div class="candles">
+
+<span class="flame">🔥</span>
+<span class="flame">🔥</span>
+<span class="flame">🔥</span>
+
+</div>
+
+<div
+id="cake"
+class="cake"
+onclick="cutCake()"
+ontouchstart="cutCake()">
+
+🎂
+
+</div>
+
+</div>
+
+<div id="cakeMsg"></div>
+
+</div>
+
+`;
+
+}
+
+/* CUT CAKE */
+
+function cutCake(){
+
+document.querySelector(".candles").innerHTML=
+"";
+
+document.getElementById("cake").innerHTML=
+"🍰 🍰";
+
+/* PREMIUM MESSAGE */
+
+document.getElementById("cakeMsg").innerHTML=`
+
+<div class="birthday-popup">
+
+🎉 HAPPY BIRTHDAY HEMA 🎉
+
+</div>
+
+<div class="final-message">
+
+<br>
+
+💖 Wishing you endless happiness,
+success and beautiful memories.
+
+<br><br>
+✨ May your smile always shine
+as bright as today.
+
+<br><br>
+
+🌸 Stay Happy
+<br>
+
+🌟 Stay Blessed
+<br>
+
+🎂 Enjoy Your Special Day
+
+<br><br>
+
+❤️ Forever Special ❤️
+
+</div>
+
+`;
+
+/* CONFETTI */
+
+for(let i=0;i<150;i++){
+
+let confetti=
+document.createElement("div");
+
+confetti.className="confetti";
+
+confetti.style.left=
+Math.random()*100+"vw";
+
+confetti.style.background=
+`hsl(${Math.random()*360},
+100%,50%)`;
+
+document.body.appendChild(confetti);
+
+setTimeout(()=>{
+confetti.remove();
+},4000);
+
+}
+
+/* HEARTS */
+
+for(let i=0;i<50;i++){
+
+let heart=
+document.createElement("div");
+
+heart.className="sparkle";
+
+heart.innerHTML="💖";
+
+heart.style.left=
+Math.random()*100+"vw";
+
+heart.style.fontSize=
+(20+Math.random()*25)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},3000);
+
+}
+
+/* SPARKLES */
+
+for(let i=0;i<50;i++){
+
+let star=
+document.createElement("div");
+
+star.className="sparkle";
+
+star.innerHTML="✨";
+
+star.style.left=
+Math.random()*100+"vw";
+
+star.style.fontSize=
+(15+Math.random()*20)+"px";
+
+document.body.appendChild(star);
+
+setTimeout(()=>{
+star.remove();
+},3000);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
